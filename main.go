@@ -26,6 +26,14 @@ func main() {
 	userSvc := service.NewUserServices(userRepo, typicodeAdaptor)
 	userHandler := controller.NewUserHandler(userSvc)
 
+	categoryRepo := gorm_mysql.NewCategoryRepo(db)
+	categorySvc := service.NewCategoryServices(categoryRepo)
+	categoryHandler := controller.NewCategoryHandler(categorySvc)
+
+	productRepo := gorm_mysql.NewProductRepo(db)
+	productSvc := service.NewProductServices(productRepo, categoryRepo)
+	productHandler := controller.NewProductHandler(productSvc)
+
 	router := gin.Default()
 	router.Use(gin.Logger())
 
@@ -33,9 +41,11 @@ func main() {
 
 	app := server.NewRouterGin(
 		router,
-		middleware,
 		authHandler,
 		userHandler,
+		categoryHandler,
+		productHandler,
+		middleware,
 	)
 
 	app.Start(":4444")

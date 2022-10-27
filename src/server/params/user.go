@@ -1,10 +1,7 @@
 package params
 
 import (
-	"errors"
 	"mini_e_commerce/src/server/model"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type AuthRegister struct {
@@ -29,19 +26,6 @@ type UserUpdate struct {
 type UserLogin struct {
 	Email    string `validate:"required"`
 	Password string `validate:"required"`
-}
-
-func Validate(u interface{}) error {
-	err := validator.New().Struct(u)
-	if err == nil {
-		return nil
-	}
-	myErr := err.(validator.ValidationErrors)
-	errString := ""
-	for _, e := range myErr {
-		errString += e.Field() + " is " + e.Tag()
-	}
-	return errors.New(errString)
 }
 
 func (u *AuthRegister) ParseToModelRegister() *model.User {
