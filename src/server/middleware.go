@@ -7,6 +7,7 @@ import (
 	"mini_e_commerce/src/server/model"
 	"mini_e_commerce/src/server/service"
 	"mini_e_commerce/src/server/view"
+	"strconv"
 	"strings"
 	"time"
 
@@ -46,8 +47,11 @@ func (m *Middleware) Auth(c *gin.Context) {
 	}
 
 	// send to next handler
-	c.Set("USER_ID", myTok.UserId)
-	c.Set("USER_EMAIL", myTok.Email)
+	user := m.userSvc.FindByEmail(myTok.Email)
+	userDetail := user.Payload.(*model.User)
+	c.Set("USER_ID", strconv.FormatUint(uint64(userDetail.ID), 10))
+	c.Set("USER_EMAIL", userDetail.Email)
+	c.Set("USER_NAME", userDetail.Fullname)
 
 	// process to another handler
 	c.Next()
