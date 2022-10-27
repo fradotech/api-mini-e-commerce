@@ -38,17 +38,7 @@ func (u *AuthServices) Register(req *params.AuthRegister) *view.Response {
 		return view.ErrInternalServer(err.Error())
 	}
 
-	type Succcess struct {
-		Message     string
-		GeneralInfo string
-	}
-
-	var success Succcess
-
-	success.Message = "REGISTER_SUCCESS"
-	success.GeneralInfo = user.Email
-
-	return view.SuccessCreated(success)
+	return view.SuccessCreated(user)
 }
 
 func (u *AuthServices) Login(req *params.UserLogin) *view.Response {

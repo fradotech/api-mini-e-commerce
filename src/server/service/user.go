@@ -31,17 +31,7 @@ func (u *UserServices) Create(req *params.UserCreate) *view.Response {
 		return view.ErrInternalServer(err.Error())
 	}
 
-	type Succcess struct {
-		Message     string
-		GeneralInfo string
-	}
-
-	var success Succcess
-
-	success.Message = "CREATED_USER_SUCCESS"
-	success.GeneralInfo = user.Email
-
-	return view.SuccessCreated(success)
+	return view.SuccessCreated(user)
 }
 
 func (u *UserServices) FindAll() *view.Response {
@@ -64,7 +54,24 @@ func (u *UserServices) FindByEmail(email string) *view.Response {
 		if err == sql.ErrNoRows {
 			return view.ErrNotFound()
 		}
-		return view.ErrInternalServer(err.Error())
+		return view.ErrNotFound()
 	}
 	return view.SuccessFindAll(user)
+}
+
+func (c *UserServices) Update(email string, req *params.UserUpdate) *view.Response {
+	user := req.ParseToModelCreate()
+
+	getUser, err := c.repo.FindByEmail(email)
+	if err != nil {
+		return view.ErrBadRequest("user doesn't exists")
+	}
+
+	user.ID = getUser.ID
+	err = c.repo.Update(email, user)
+	if err != nil {
+		return view.ErrInternalServer(err.Error())
+	}
+
+	return view.SuccessUpdated(view.NewUserUpdateResponse(user))
 }

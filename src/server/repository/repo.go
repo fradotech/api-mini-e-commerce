@@ -7,7 +7,7 @@ type UserRepo interface {
 	FindAll() (*[]model.User, error)
 	FindById(id string) (*model.User, error)
 	FindByEmail(email string) (*model.User, error)
-	Update(user *model.User) (*model.User, error)
+	Update(email string, user *model.User) error
 	Delete(id string) error
 }
 

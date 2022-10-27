@@ -10,17 +10,16 @@ type AuthRegister struct {
 }
 
 type UserCreate struct {
-	Fullname   string
-	Gender     string
-	Contact    string
-	Street     string
-	CityId     string
-	ProvinceId string
+	Fullname   string `validate:"required"`
+	Gender     string `validate:"required"`
+	Contact    string `validate:"required"`
+	Street     string `validate:"required"`
+	CityId     string `validate:"required" json:"city_id"`
+	ProvinceId string `validate:"required" json:"province_id"`
 }
 
 type UserUpdate struct {
-	Email    string
-	Password string
+	UserCreate
 }
 
 type UserLogin struct {
