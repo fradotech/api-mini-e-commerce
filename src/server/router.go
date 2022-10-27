@@ -12,6 +12,7 @@ type GinRouter struct {
 	user       *controller.UserHandler
 	category   *controller.CategoryHandler
 	product    *controller.ProductHandler
+	cart       *controller.CartHandler
 	middleware *Middleware
 }
 
@@ -21,6 +22,7 @@ func NewRouterGin(
 	user *controller.UserHandler,
 	category *controller.CategoryHandler,
 	product *controller.ProductHandler,
+	cart *controller.CartHandler,
 	middleware *Middleware,
 ) *GinRouter {
 	return &GinRouter{
@@ -29,6 +31,7 @@ func NewRouterGin(
 		user:       user,
 		category:   category,
 		product:    product,
+		cart:       cart,
 		middleware: middleware,
 	}
 }
@@ -58,6 +61,14 @@ func (r *GinRouter) Start(port string) {
 	product.POST("/", r.middleware.Auth, r.middleware.CheckRole(r.product.CreateProduct, []string{"admin"}))
 	product.PUT("/:productId", r.middleware.Auth, r.middleware.CheckRole(r.product.UpdateProduct, []string{"admin"}))
 	product.PATCH("/:productId", r.middleware.Auth, r.middleware.CheckRole(r.product.DeleteProduct, []string{"admin"}))
+
+	cart := r.router.Group("/carts")
+	cart.GET("/", r.middleware.Auth, r.middleware.CheckRole(r.cart.GetCarts, []string{"admin", "cashier"}))
+	cart.GET("/session", r.middleware.Auth, r.middleware.CheckRole(r.cart.GetUserCarts, []string{"admin", "cashier", "member"}))
+	cart.GET("/:cartId", r.middleware.Auth, r.middleware.CheckRole(r.cart.GetCartById, []string{"admin", "cashier"}))
+	cart.POST("/", r.middleware.Auth, r.middleware.CheckRole(r.cart.CreateCart, []string{"admin", "cashier", "member"}))
+	cart.PUT("/:cartId", r.middleware.Auth, r.middleware.CheckRole(r.cart.UpdateCart, []string{"admin", "cashier", "member"}))
+	cart.PATCH("/:cartId", r.middleware.Auth, r.middleware.CheckRole(r.cart.DeleteCart, []string{"admin", "cashier", "member"}))
 
 	r.router.Run(port)
 }
