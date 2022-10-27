@@ -40,7 +40,13 @@ func ConnectGormDB() (*gorm.DB, error) {
 
 	db.Debug().AutoMigrate(
 		model.User{},
+		model.Category{},
 		model.Product{},
+		model.Cart{},
+		model.Order{},
+		model.OrderItem{},
+		model.Payment{},
+		model.Delivery{},
 	)
 
 	return db, nil

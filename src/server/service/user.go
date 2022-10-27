@@ -3,21 +3,18 @@ package service
 import (
 	"database/sql"
 	"log"
-	"mini_e_commerce/src/adaptor"
 	"mini_e_commerce/src/server/params"
 	"mini_e_commerce/src/server/repository"
 	"mini_e_commerce/src/server/view"
 )
 
 type UserServices struct {
-	repo            repository.UserRepo
-	typicodeAdaptor *adaptor.TypicodeAdaptor
+	repo repository.UserRepo
 }
 
-func NewUserServices(repo repository.UserRepo, typicodeAdaptor *adaptor.TypicodeAdaptor) *UserServices {
+func NewUserServices(repo repository.UserRepo) *UserServices {
 	return &UserServices{
-		repo:            repo,
-		typicodeAdaptor: typicodeAdaptor,
+		repo: repo,
 	}
 }
 

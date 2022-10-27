@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+var headers []map[string]string
+
 type Client struct {
 	baseUrl string
 }
@@ -16,6 +18,10 @@ func NewHttpClient(baseUrl string) *Client {
 	return &Client{
 		baseUrl: baseUrl,
 	}
+}
+
+func (c *Client) SetHeader(header map[string]string) {
+	headers = append(headers, header)
 }
 
 func (c *Client) Get(path string) ([]byte, error) {
@@ -57,6 +63,11 @@ func (c *Client) build(method string, path string, payload []byte) (interface{},
 	}
 
 	req.Header.Set("Content-Type", "application/json")
+	for _, header := range headers {
+		for key, value := range header {
+			req.Header.Set(key, value)
+		}
+	}
 
 	resp, err := client.Do(req)
 	if err != nil {
