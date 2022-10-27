@@ -19,7 +19,7 @@ var SECRET_KEY = "iniAdalahSecretKey"
 func CreateToken(payload *Token) (string, error) {
 	claims := jwt.MapClaims{
 		"payload": payload,
-		"issued":  time.Now().Add(10 * time.Minute),
+		"issued":  time.Now().Add(24 * time.Hour),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
