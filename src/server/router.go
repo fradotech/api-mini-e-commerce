@@ -37,13 +37,15 @@ func (r *GinRouter) Start(port string) {
 	r.router.Use(r.middleware.Trace)
 
 	auth := r.router.Group("/auth")
-	auth.GET("/", r.middleware.Auth, r.middleware.CheckRole(r.auth.Profile, []string{"admin", "cashier", "member"}))
 	auth.POST("/register", r.auth.Register)
 	auth.POST("/login", r.auth.Login)
 
 	user := r.router.Group("/users")
-	user.GET("/", r.middleware.Auth, r.middleware.CheckRole(r.user.FindAll, []string{"admin"}))
 	user.POST("/", r.middleware.Auth, r.middleware.CheckRole(r.user.Create, []string{"admin"}))
+	user.GET("/profile", r.middleware.Auth, r.middleware.CheckRole(r.user.Profile, []string{"admin", "cashier", "member"}))
+	user.PUT("/profile", r.middleware.Auth, r.middleware.CheckRole(r.user.Update, []string{"admin", "cashier", "member"}))
+	user.GET("/", r.middleware.Auth, r.middleware.CheckRole(r.user.FindAll, []string{"admin"}))
+	user.GET("/email/:email", r.middleware.Auth, r.middleware.CheckRole(r.user.FindByEmail, []string{"admin"}))
 
 	category := r.router.Group("/categories")
 	category.GET("/", r.middleware.Auth, r.middleware.CheckRole(r.category.GetCategories, []string{"admin", "cashier", "member"}))

@@ -3,41 +3,46 @@ package view
 import "net/http"
 
 type Response struct {
-	Status  int         `json:"status"`
-	Message string      `json:"message"`
-	Payload interface{} `json:"payload"`
-	Error   interface{} `json:"error"`
+	Status      int         `json:"status"`
+	Message     string      `json:"message"`
+	GeneralInfo string      `json:"general_info"`
+	Payload     interface{} `json:"payload"`
+	Error       interface{} `json:"error"`
 }
 
 func SuccessCreated(payload interface{}) *Response {
 	return &Response{
-		Status:  http.StatusCreated,
-		Payload: payload,
-		Message: "success create",
+		Status:      http.StatusCreated,
+		Message:     "success create",
+		GeneralInfo: "Kelompok 1",
+		Payload:     payload,
 	}
 }
 
 func SuccessUpdated(payload interface{}) *Response {
 	return &Response{
-		Status:  http.StatusOK,
-		Payload: payload,
-		Message: "success updated",
+		Status:      http.StatusOK,
+		Message:     "success updated",
+		GeneralInfo: "Kelompok 1",
+		Payload:     payload,
 	}
 }
 
 func SuccessDeleted(payload interface{}) *Response {
 	return &Response{
-		Status:  http.StatusOK,
-		Payload: payload,
-		Message: "success delete",
+		Status:      http.StatusOK,
+		Message:     "success delete",
+		GeneralInfo: "Kelompok 1",
+		Payload:     payload,
 	}
 }
 
 func SuccessFindAll(payload interface{}) *Response {
 	return &Response{
-		Status:  http.StatusOK,
-		Payload: payload,
-		Message: "success get data",
+		Status:      http.StatusOK,
+		Message:     "success get data",
+		GeneralInfo: "Kelompok 1",
+		Payload:     payload,
 	}
 }
 

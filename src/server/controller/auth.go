@@ -20,13 +20,6 @@ func NewAuthHandler(svc *service.AuthServices) *AuthHandler {
 	}
 }
 
-func (a *AuthHandler) Profile(c *gin.Context) {
-	fmt.Println("Log from ", c.GetString("USER_EMAIL"))
-	resp := a.userSvc.FindByEmail(c.GetString("USER_EMAIL"))
-
-	WriteJsonResponseGin(c, resp)
-}
-
 func (a *AuthHandler) Register(c *gin.Context) {
 	var req params.AuthRegister
 	err := c.ShouldBindJSON(&req)
